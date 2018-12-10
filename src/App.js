@@ -1,24 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
-import Panel from './Panel';
 import CardSimple from './CardSimple';
+import NovoPost from './Form';
+import VisualizarDetalhe from './VisualizarDetalhe';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { fetchPosts } from './actions/posts'
+import { connect } from 'react-redux'
+import LoadingBar from 'react-redux-loading'
 
 class App extends Component {
+  componentDidMount() {
+    this.props.dispatch(fetchPosts())
+  }
+
   render() {
-    const test = [1, 2, 3];
 
     return (
-      <div className="App" >
-          <CardSimple >
-          {test.map((item, index) => (
-                <div className="row" key={index}>
-                <Panel />
-              </div>
-                  ))}
-            </CardSimple >     
-      </div>
+      <Router>
+        <Fragment>
+          <LoadingBar />
+          <div className='container'>
+            {this.props.loading === true
+              ? null
+              :
+              < div className="App" >
+             <Route exact path='/novoPost/' component={NovoPost} />
+            <Route exact path='/visualizarDetalhe/:id' component={VisualizarDetalhe} />
+            <Route exact path='/' component={CardSimple} />
+          </div>}
+          </div>
+        </Fragment>
+      </Router >
     );
   }
 }
 
-export default App;
+function mapStateToProps({posts}) {
+  return {
+    loading: !posts.hasOwnProperty('data'),
+  }
+}
+
+export default connect(mapStateToProps)(App)
