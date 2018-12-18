@@ -8,6 +8,10 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
 import Panel from './Panel';
 import {connect} from 'react-redux'
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = {
   card: {
@@ -30,10 +34,35 @@ const styles = {
 };
 
 class SimpleCard extends Component {
+  state = {categoriesSelected: ''};
+  
+  handleChange = e => {
+    this.setState(() => {
+        return {categoriesSelected: e.target.value}; 
+    }) 
+  }
   render() {
   const { classes } = this.props;
   return (
     <Card className={classes.card}>
+    <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="categories-simple">Categories</InputLabel>
+          <Select
+            value={this.state.categoriesSelected}
+            onChange={this.handleChange}
+            inputProps={{
+              name: 'Categories',
+              id: 'categories-simple',
+            }}
+          >
+             <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            { this.props.categories.map((category, index) => (
+                <MenuItem key={index} value={category.name}>{category.name}</MenuItem>
+            ))}
+          </Select>
+          </FormControl>
         <CardActions>
           <Button component={Link}  to="/novoPost/" variant="contained" color="primary" className={classes.button}>
           
@@ -59,9 +88,11 @@ SimpleCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps ({posts}, { id }) {
+function mapStateToProps ({posts, categories}, { id }) {
+  console.log(categories)
   return {
-    posts:posts.data
+    posts: posts.data,
+    categories: categories.data.categories
   }
 }
 

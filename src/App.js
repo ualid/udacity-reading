@@ -5,12 +5,14 @@ import NovoPost from './Form';
 import VisualizarDetalhe from './VisualizarDetalhe';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { fetchPosts } from './actions/posts'
+import { fetchCategories } from './actions/categories'
 import { connect } from 'react-redux'
 import LoadingBar from 'react-redux-loading'
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch(fetchPosts())
+    this.props.dispatch(fetchPosts());
+    this.props.dispatch(fetchCategories());
   }
 
   render() {
@@ -35,9 +37,9 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({posts}) {
+function mapStateToProps({posts, categories}) {
   return {
-    loading: !posts.hasOwnProperty('data'),
+    loading: !posts.hasOwnProperty('data') || !categories.hasOwnProperty('data') ,
   }
 }
 
