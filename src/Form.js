@@ -4,6 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { fetchPostsByCategories, addRowPost } from './actions/posts';
+import { connect } from 'react-redux'
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = theme => ({
   container: {
@@ -25,18 +31,34 @@ const styles = theme => ({
 
 class TextFields extends React.Component {
   state = {
-    name: ''
+    title: '',
+    body: '',
+    author: '',
+    categoriesSelected: ''
   };
   submitHandler = event => {
-    console.log(this.state.name);
+    var date = new Date();
+    var components = [
+      date.getYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds()
+  ];
+  
+    const timestampKey = components.join("");
+    const objSave = {id: timestampKey, timestamp: Date.now(), title: this.state.title, author: this.state.author, category: this.state.categoriesSelected}
+    this.props.addRowPost(objSave);
     event.preventDefault()
  };
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value,
+      [name]: event.target.value
     });
   };
-
+ 
   render() {
     const { classes } = this.props;
 
@@ -45,13 +67,53 @@ class TextFields extends React.Component {
         <Grid container>
             <TextField
             id="standard-name"
-            label="Name"
+            label="Title"
             className={classes.textField}
-            value={this.state.name}
-            onChange={this.handleChange('name')}
+            value={this.state.title}
+            onChange={this.handleChange('title')}
             margin="normal"
             />
         </Grid>
+        <Grid container>
+            <TextField
+            id="standard-body"
+            label="Body"
+            className={classes.textField}
+            value={this.state.body}
+            onChange={this.handleChange('body')}
+            margin="normal"
+            />
+        </Grid>
+        <Grid container>
+            <TextField
+            id="standard-author"
+            label="Author"
+            className={classes.textField}
+            value={this.state.author}
+            onChange={this.handleChange('author')}
+            margin="normal"
+            />
+        </Grid>
+
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="categories-simple">Categories</InputLabel>
+          <Select
+            value={this.state.categoriesSelected}
+            onChange={this.handleChange('categoriesSelected')}
+            inputProps={{
+              name: 'Categories',
+              id: 'categories-simple',
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {this.props.categories.map((category, index) => (
+              <MenuItem key={index} value={category.name}>{category.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+ 
         <Grid container direction="row" >
             <Button variant="contained" type="submit" style={{'marginLeft': '10px'}} color="primary"  >Salvar </Button>
         </Grid>
@@ -64,4 +126,14 @@ TextFields.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TextFields);
+function mapStateToProps({ categories }) {
+  return {
+    categories: categories.data.categories
+  }
+}
+const mapDispatchToProps = {
+  fetchPostsByCategories,
+  addRowPost
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TextFields));

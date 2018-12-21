@@ -17,7 +17,6 @@ import {connect} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
 import { withRouter } from 'react-router-dom'
 import { fetchComments } from './actions/comments'
-import { bindActionCreators } from 'redux'
 
 const styles = theme => ({
   card: {
