@@ -36,7 +36,7 @@ const styles = {
 };
 
 class SimpleCard extends Component {
-  state = { categoriesSelected: '', filterSelected: '' };
+  state = { categoriesSelected: '', filterSelected: '1' };
 
   handleChange = e => {
     this.setState(() => {
@@ -44,19 +44,31 @@ class SimpleCard extends Component {
     });
 
     if (e.target.value === "") {
-      this.props.fetchPosts()
+      this.props.fetchPosts(this.state.filterSelected)
     } else {
       this.props.fetchPostsByCategories(e.target.value)
     }
   }
-  handleFilter = e => {
-    this.setState(() => {
-      return { filterSelected: e.target.value };
-    });
-
+  
+  orderPosts(order){
+    let posts = this.props.posts;
+    
+    if(order == '1'){
+        posts.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );  
+    }else{
+        posts.sort(function(a,b) { return (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0);} );  
+    }
   }
+  handleFilter = e => {
+    
+    this.setState( () => {
+      return { 'filterSelected': e.target.value } 
+    }); 
+    this.orderPosts(e.target.value);
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, posts } = this.props;
     return (
       <Card className={classes.card}>
       <Grid>
@@ -90,9 +102,7 @@ class SimpleCard extends Component {
               id: 'categories-simple',
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            
               <MenuItem value='1'>
                 {'VoteScore'}
               </MenuItem>
@@ -108,7 +118,7 @@ class SimpleCard extends Component {
           </Button>
         </CardActions>
         <CardContent>
-          {this.props.posts.map((post, index) => (
+          {posts.map((post, index) => (
             <div className="row" key={index}>
               <Panel post={post} />
             </div>
@@ -127,6 +137,7 @@ SimpleCard.propTypes = {
 };
 
 function mapStateToProps({ posts, categories }, { id }) {
+  console.log(' => ', posts )
   return {
     posts: posts.data,
     categories: categories.data.categories

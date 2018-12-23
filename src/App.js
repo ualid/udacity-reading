@@ -6,13 +6,15 @@ import VisualizarDetalhe from './VisualizarDetalhe';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { fetchPosts } from './actions/posts'
 import { fetchCategories } from './actions/categories'
+import { visualizationForm } from './actions/shared'
 import { connect } from 'react-redux'
 import LoadingBar from 'react-redux-loading'
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch(fetchPosts());
+    this.props.dispatch(fetchPosts('1'));
     this.props.dispatch(fetchCategories());
+    this.props.dispatch(visualizationForm(false));
   }
 
   render() {
@@ -26,7 +28,8 @@ class App extends Component {
               ? null
               :
               < div className="App" >
-             <Route exact path='/novoPost/' component={NovoPost} />
+            <Route exact path='/novoPost/' component={NovoPost} />
+            <Route exact path='/editPost/:id' component={NovoPost} />
             <Route exact path='/visualizarDetalhe/:id' component={VisualizarDetalhe} />
             <Route exact path='/' component={CardSimple} />
           </div>}

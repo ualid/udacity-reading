@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { fetchPostsByCategories, addRowPost } from './actions/posts';
+import { fetchPostsByCategories, addPost, updatePost } from './actions/posts';
 import { connect } from 'react-redux'
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -34,8 +34,21 @@ class TextFields extends React.Component {
     title: '',
     body: '',
     author: '',
-    categoriesSelected: ''
+    categoriesSelected: '',
+    id: null
   };
+  componentDidMount() {
+    if(this.props.post.length > 0) {
+      const post = this.props.post[0];
+      this.setState({
+        title: post.title,
+        author: post.author,
+        body: post.body,
+        categoriesSelected: post.category,
+        id: post.id
+      })
+    }
+  }
   submitHandler = event => {
     var date = new Date();
     var components = [
@@ -47,10 +60,31 @@ class TextFields extends React.Component {
       date.getSeconds(),
       date.getMilliseconds()
   ];
-  
+
+    if(this.state.id === null) {
     const timestampKey = components.join("");
-    const objSave = {id: timestampKey, timestamp: Date.now(), title: this.state.title, author: this.state.author, category: this.state.categoriesSelected}
-    this.props.addRowPost(objSave);
+    const objSave = {
+                    id: timestampKey, 
+                    timestamp: Date.now(), 
+                    title: this.state.title,
+                    author: this.state.author,
+                    body: this.state.body,
+                    category: this.state.categoriesSelected
+                  }
+   const result = this.props.addPost(objSave);
+    console.log('result ', result);
+    
+  } else {
+    const objSave = {
+      id: this.state.id, 
+      timestamp: Date.now(), 
+      title: this.state.title,
+      author: this.state.author,
+      body: this.state.body,
+      category: this.state.categoriesSelected
+    }
+    this.props.updatePost(objSave);
+  }
     event.preventDefault()
  };
   handleChange = name => event => {
@@ -126,14 +160,24 @@ TextFields.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({ categories }) {
+function mapStateToProps({ categories, posts }, props) {
+  let post = null;
+  let id = null
+  if(props.match.hasOwnProperty('params')){
+    id = props.match.params.id;
+    post = posts.data.filter(post => post.id === id)
+  }
+
   return {
-    categories: categories.data.categories
+    categories: categories.data.categories,
+    id,
+    post
   }
 }
 const mapDispatchToProps = {
   fetchPostsByCategories,
-  addRowPost
+  addPost,
+  updatePost
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TextFields));

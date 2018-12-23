@@ -1,6 +1,8 @@
-import { RECEIVE_POSTS, RECEIVE_CATEGORIES_POSTS, ADD_POST } from '../actions/posts';
+import { RECEIVE_POSTS, RECEIVE_CATEGORIES_POSTS, ADD_POST, DELETE_POST, UPDATE_POST } from '../actions/posts';
 
 export default function posts (state = {}, action) {
+    let posts = null;
+
     switch(action.type) {
         case RECEIVE_POSTS: 
         return {
@@ -15,7 +17,23 @@ export default function posts (state = {}, action) {
         case ADD_POST: 
         return {
             ...state,
-            ...action.posts
+            'data': state.data.concat(action.post.data) 
+        }
+        case UPDATE_POST: 
+        posts = state.data;
+        posts.splice(posts.findIndex(e => e.id === action.post.data.id),1);
+        posts.push( action.post.data);
+
+        return {
+            ...state,
+            'data': posts
+        }
+
+        case DELETE_POST: 
+        return {
+            ...state,
+            'data': state.data.filter( post => post.id !== action.post.data.id)
+
         }
         default:
             return state

@@ -15,7 +15,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Moment from 'react-moment';
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
-import { fetchComments } from './actions/comments'
+import { deletePost } from './actions/posts'
+
+import EditIcon from './EditIcon';
+import DeleteIcon from './DeleteIcon';
 
 const styles = theme => ({
   card: {
@@ -49,7 +52,7 @@ const styles = theme => ({
 });
 
 class RecipeReviewCard extends Component {
-  state = { expanded: false };
+  state = { expanded: false, post: []};
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
@@ -59,8 +62,35 @@ class RecipeReviewCard extends Component {
     this.props.history.push(`/visualizarDetalhe/${id}`)
   };
 
+  handlerClickEdit = (post) => {
+    this.props.history.push({
+      pathname:`/editPost/${post.id}`,
+      id: post.id,
+      post
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    //this.props.post = nextProps.post;
+    this.setState({
+      post: nextProps.post
+    })
+    //console.log('nextProps ', nextProps);
+    
+  }
+  componentWillMount(){
+    this.setState({
+      post: this.props.post
+    })
+  }
+  handlerClickDelete = (post) => {
+      this.props.deletePost(post)
+  }
+ 
   render() {
-    const { classes, post } = this.props;
+    const { classes } = this.props;
+    const { post } = this.state;
+     
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -87,11 +117,13 @@ class RecipeReviewCard extends Component {
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
+            <FavoriteIcon />{ post.voteScore}
           </IconButton>
-          <IconButton  onClick={(e) => this.showDetails(e, post.id)} aria-label="Comment">
-            <CommentIcon  label="123"/>{ post.commentCount}
+          <IconButton  onClick={(e) => this.showDetails(e, post.id)} aria-label="Post">
+            <CommentIcon label="123"/>{ post.commentCount}
           </IconButton>
+          <EditIcon onClick={() => this.handlerClickEdit(post)}/>
+            <DeleteIcon onClick={() => this.handlerClickDelete(post)}/>
           
         </CardActions>
      
@@ -110,4 +142,7 @@ function mapStateToProps ({posts, comments},  props ) {
     posts
   }
 }
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(RecipeReviewCard)));
+const mapDispatchToProps = {
+  deletePost
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipeReviewCard)));

@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button'; 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
@@ -15,8 +16,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Moment from 'react-moment';
 import {connect} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
-import { withRouter } from 'react-router-dom'
-import { fetchComments } from './actions/comments'
+import { withRouter } from 'react-router-dom';
+import { fetchComments, deleteCommenter } from './actions/comments';
+import { visualizationForm, visualizationEdit } from './actions/shared';
+import FormCommenter from './FormCommenter';
+import EditIcon from './EditIcon';
+import DeleteIcon from './DeleteIcon';
 
 const styles = theme => ({
   card: {
@@ -50,12 +55,27 @@ const styles = theme => ({
 });
 
 class VisualizarDetalhe extends React.Component {
-  state = { expanded: false };
+  state = { commenter: null };
  
-  handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+  handleClick = () => { 
+    this.setState({
+      commenter: null
+    });
+    this.props.visualizationForm(true)
+   
   };
 
+  handlerClickEdit = (commenter) => {
+    this.props.visualizationForm(false)
+    this.props.visualizationForm(true)
+    this.setState({
+        commenter: commenter
+    });
+  }
+
+  handlerClickDelete = (commenter) => {
+      this.props.deleteCommenter(commenter)
+  }
   componentDidMount() {
     this.props.fetchComments(this.props.post.id)
   }
@@ -100,8 +120,25 @@ class VisualizarDetalhe extends React.Component {
             {post.voteScore}
           </Typography>
           </IconButton>
+          <Button size="small" onClick={this.handleClick} color="primary">
+          New Commenter
+        </Button>
         </CardActions>
       </Card>
+        
+      </Grid>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+      >
+         <Card key='2' className={classes.card}> 
+         {
+            this.props.visualization && (
+              <FormCommenter parentId = {this.props.parentId} commenter = {this.state.commenter}/>
+            )
+          }
+        </Card> 
       </Grid>
       <br/>
       {this.props.comments.hasOwnProperty('data') && (
@@ -148,6 +185,8 @@ class VisualizarDetalhe extends React.Component {
                 {comment.voteScore}
               </Typography>
               </IconButton>
+                  <EditIcon onClick={() => this.handlerClickEdit(comment)}/>
+                  <DeleteIcon onClick={() => this.handlerClickDelete(comment)}/>
             </CardActions>
           </Card>
       </Grid> ))}
@@ -161,23 +200,22 @@ VisualizarDetalhe.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps ({posts, comments},  props ) {
+function mapStateToProps ({posts, comments, shared},  props ) {
   let { id } = props.match.params
   let post = null
-  console.log(props, ' props')
    posts.data.map((ele) => {
       if(ele.id === id){
         post = ele;
       }
     })
     
-    
-    //this.props.dispatch(fetchComments(id));
- 
   return {
     //loading: !comments.hasOwnProperty('data'),
     post,
-    comments
+    comments,
+    parentId: id,
+    visualization: shared.visualization,
+    visualizationEdit: shared.visualizationEdit
   }
 }
 /*
@@ -189,5 +227,7 @@ function mapDispatchToProps({dispatch}, props) {
 
 const mapDispatchToProps = {
   fetchComments,
+  deleteCommenter,
+  visualizationForm
  };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(VisualizarDetalhe)));
