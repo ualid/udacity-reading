@@ -71,7 +71,6 @@ class RecipeReviewCard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-<<<<<<< HEAD
     this.setState({
       post: nextProps.post
     })
@@ -79,14 +78,6 @@ class RecipeReviewCard extends Component {
   
   saveFavorite() {
     console.log('Favorite')
-=======
-    //this.props.post = nextProps.post;
-    this.setState({
-      post: nextProps.post
-    })
-    //console.log('nextProps ', nextProps);
-    
->>>>>>> c81a1b7443331a5ebc563084d14d426b819d9261
   }
   componentWillMount(){
     this.setState({
@@ -126,11 +117,7 @@ class RecipeReviewCard extends Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-<<<<<<< HEAD
           <IconButton onClick={this.saveFavorite} aria-label="Add to favorites">
-=======
-          <IconButton aria-label="Add to favorites">
->>>>>>> c81a1b7443331a5ebc563084d14d426b819d9261
             <FavoriteIcon />{ post.voteScore}
           </IconButton>
           <IconButton  onClick={(e) => this.showDetails(e, post.id)} aria-label="Post">

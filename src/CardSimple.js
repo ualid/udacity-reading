@@ -150,11 +150,7 @@ SimpleCard.propTypes = {
 };
 
 function mapStateToProps({ posts, categories }, { id }) {
-<<<<<<< HEAD
   console.log(' mapStateToProps ', posts )
-=======
-  console.log(' => ', posts )
->>>>>>> c81a1b7443331a5ebc563084d14d426b819d9261
   return {
     posts: posts.data,
     categories: categories.data.categories

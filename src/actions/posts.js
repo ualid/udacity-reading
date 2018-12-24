@@ -5,19 +5,11 @@ export  function fetchPosts(order) {
     return (dispatch) => {
       dispatch(showLoading)
       return axios.get("http://localhost:3001/posts",  { headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
-<<<<<<< HEAD
         /*if(order == '1'){
           response.data.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );  
         }else{
           response.data.sort(function(a,b) { return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );  
         }*/
-=======
-        if(order === '1'){
-          response.data.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );  
-        }else{
-          response.data.sort(function(a,b) { return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );  
-        }
->>>>>>> c81a1b7443331a5ebc563084d14d426b819d9261
         dispatch(receivePosts(response))
         dispatch(hideLoading)  
       });
