@@ -17,8 +17,8 @@ import Moment from 'react-moment';
 import {connect} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
 import { withRouter } from 'react-router-dom';
-import { fetchComments, deleteCommenter } from './actions/comments';
-import { visualizationForm, visualizationEdit } from './actions/shared';
+import { fetchComments, deleteCommenter } from '../actions/comments';
+import { visualizationForm, visualizationEdit } from '../actions/shared';
 import FormCommenter from './FormCommenter';
 import EditIcon from './EditIcon';
 import DeleteIcon from './DeleteIcon';

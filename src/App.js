@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import './App.css';
-import CardSimple from './CardSimple';
-import NovoPost from './Form';
-import VisualizarDetalhe from './VisualizarDetalhe';
+import CardSimple from './components/CardSimple';
+import NovoPost from './components/Form';
+import VisualizarDetalhe from './components/VisualizarDetalhe';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { fetchPosts } from './actions/posts'
 import { fetchCategories } from './actions/categories'

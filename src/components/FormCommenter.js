@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { addCommenter, updateCommenter } from './actions/comments';
+import { addCommenter, updateCommenter } from '../actions/comments';
 import { connect } from 'react-redux'
 
 const styles = theme => ({
@@ -29,7 +29,8 @@ class TextFields extends React.Component {
   state = {
     body: '',
     author: '',
-    id: null
+    id: null,
+    show: false
   };
   submitHandler = event => {
     var date = new Date();

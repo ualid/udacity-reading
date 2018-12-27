@@ -15,7 +15,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Moment from 'react-moment';
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
-import { deletePost } from './actions/posts'
+import { deletePost } from '../actions/posts'
 
 import EditIcon from './EditIcon';
 import DeleteIcon from './DeleteIcon';

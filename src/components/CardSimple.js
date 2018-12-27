@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { fetchPostsByCategories, fetchPosts } from './actions/posts'
+import { fetchPostsByCategories, fetchPosts } from '../actions/posts'
 import Grid from '@material-ui/core/Grid';
 
 const styles = {

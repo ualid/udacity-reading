@@ -5,11 +5,6 @@ export  function fetchPosts(order) {
     return (dispatch) => {
       dispatch(showLoading)
       return axios.get("http://localhost:3001/posts",  { headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
-        /*if(order == '1'){
-          response.data.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );  
-        }else{
-          response.data.sort(function(a,b) { return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );  
-        }*/
         dispatch(receivePosts(response))
         dispatch(hideLoading)  
       });
@@ -30,19 +25,6 @@ export  function  addPost(post) {
   }
 }
 
-export  function orderPost(order) {
-  return (dispatch) => {
-    dispatch(showLoading)
-     /* if(order === '1'){
-        this.props.posts.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore > a.voteScore) ? -1 : 0);} );  
-      }else{
-        this.props.posts.sort(function(a,b) { return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );  
-      }*/
-      dispatch(orderPost(order))
-      dispatch(hideLoading)  
-
-  }
-}
 export function fetchPostsByCategories(categoryName) {
   return (dispatch) => {
     dispatch(showLoading)
@@ -91,7 +73,7 @@ export  function updatePost(post) {
     return axios.put(`http://localhost:3001/posts/${post.id}`,  post,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(updateRowPost(response))
       dispatch(hideLoading)  
-      alert('upt Sucess!');
+      alert('Updated Sucess!');
       this.history.push('/')
     });
 

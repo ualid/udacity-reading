@@ -42,7 +42,6 @@ export  function deleteCommenter(commenter) {
   return (dispatch) => {
     dispatch(showLoading)
     return axios.delete(`http://localhost:3001/comments/${commenter.id}`, {  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
-      console.log('commenter delete => ', response)
       dispatch(deleteRowComment(response))
       dispatch(hideLoading)  
     });
