@@ -59,12 +59,12 @@ class RecipeReviewCard extends Component {
   };
   showDetails(e, id){
     e.preventDefault()   
-    this.props.history.push(`/visualizarDetalhe/${id}`)
+    this.props.history.push(`/category/${id}`)
   };
 
   handlerClickEdit = (post) => {
     this.props.history.push({
-      pathname:`/editPost/${post.id}`,
+      pathname:`/post/${post.id}`,
       id: post.id,
       post
     })

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { showLoading, hideLoading } from 'react-redux-loading'
-import { visualizationForm } from './shared'
+import { showLoading, hideLoading } from 'react-redux-loading';
+import { visualizationForm } from './shared';
+const urlBase = "http://localhost:3001/comments";
 
 export  function fetchComments(id) {
     return (dispatch) => {
@@ -16,7 +17,7 @@ export  function fetchComments(id) {
 export  function addCommenter(commenter) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.post("http://localhost:3001/comments",  commenter,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.post(`${urlBase}`, commenter,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(addRowComment(response))
       dispatch(visualizationForm(false))
       dispatch(hideLoading)  
@@ -28,7 +29,7 @@ export  function addCommenter(commenter) {
 export  function updateCommenter(commenter) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.put(`http://localhost:3001/comments/${commenter.id}`,  commenter,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.put(`${urlBase}/${commenter.id}`,  commenter,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(updateRowComment(response))
       dispatch(hideLoading)  
       dispatch(visualizationForm(false))
@@ -41,7 +42,7 @@ export  function updateCommenter(commenter) {
 export  function deleteCommenter(commenter) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.delete(`http://localhost:3001/comments/${commenter.id}`, {  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.delete(`${urlBase}/${commenter.id}`, {  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(deleteRowComment(response))
       dispatch(hideLoading)  
     });

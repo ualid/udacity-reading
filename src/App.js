@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import CardSimple from './components/CardSimple';
 import NovoPost from './components/Form';
+import NoMatch from './components/NoMatch';
 import VisualizarDetalhe from './components/VisualizarDetalhe';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { fetchPosts } from './actions/posts'
 import { fetchCategories } from './actions/categories'
 import { visualizationForm } from './actions/shared'
@@ -28,10 +29,14 @@ class App extends Component {
               ? null
               :
               < div className="App" >
-            <Route exact path='/novoPost/' component={NovoPost} />
-            <Route exact path='/editPost/:id' component={NovoPost} />
-            <Route exact path='/visualizarDetalhe/:id' component={VisualizarDetalhe} />
-            <Route exact path='/' component={CardSimple} />
+           
+            <Switch>
+              <Route exact path='/post/' component={NovoPost} />
+              <Route exact path='/post/:id' component={NovoPost} />
+              <Route exact path='/category/:id' component={VisualizarDetalhe} />
+              <Route path='/category' component={CardSimple} />
+              <Route  component={NoMatch} />
+            </Switch>
           </div>}
           </div>
         </Fragment>

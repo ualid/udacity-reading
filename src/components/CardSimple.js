@@ -126,8 +126,8 @@ class SimpleCard extends Component {
           </FormControl>
           </Grid>
         <CardActions>
-          <Button component={Link} to="/novoPost/" variant="contained" color="primary" className={classes.button}>
-            Novo
+          <Button component={Link} to="/post/" variant="contained" color="primary" className={classes.button}>
+            New
           </Button>
         </CardActions>
         <CardContent>

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { showLoading, hideLoading } from 'react-redux-loading'
-
-export  function fetchPosts(order) {
+const urlBase = "http://localhost:3001/posts";
+export  function fetchPosts() {
     return (dispatch) => {
       dispatch(showLoading)
-      return axios.get("http://localhost:3001/posts",  { headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+      return axios.get(`${urlBase}`,  { headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
         dispatch(receivePosts(response))
         dispatch(hideLoading)  
       });
@@ -15,11 +15,11 @@ export  function fetchPosts(order) {
 export  function  addPost(post) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.post("http://localhost:3001/posts",  post,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.post(`${urlBase}`,  post,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(addRowPost(response))
       dispatch(hideLoading)  
       alert('Add Sucess!');
-      this.history.push('/')
+      this.history.push('/category')
      });
 
   }
@@ -70,11 +70,11 @@ export function addRowPost (post) {
 export  function updatePost(post) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.put(`http://localhost:3001/posts/${post.id}`,  post,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.put(`${urlBase}/${post.id}`,  post,{  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(updateRowPost(response))
       dispatch(hideLoading)  
       alert('Updated Sucess!');
-      this.history.push('/')
+      this.history.push('/category')
     });
 
   }
@@ -83,7 +83,7 @@ export  function updatePost(post) {
 export  function deletePost(post) {
   return (dispatch) => {
     dispatch(showLoading)
-    return axios.delete(`http://localhost:3001/posts/${post.id}`, {  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
+    return axios.delete(`${urlBase}/${post.id}`, {  headers: { 'Authorization': 'whatever-you-want' }}).then( response => {
       dispatch(deleteRowPost(response))
       dispatch(hideLoading)  
     });

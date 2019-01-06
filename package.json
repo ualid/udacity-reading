@@ -9,6 +9,7 @@
     "moment": "^2.22.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-material-ui-form-validator": "^2.0.3",
     "react-moment": "^0.8.4",
     "react-redux": "^6.0.0",
     "react-redux-loading": "^1.0.1",
@@ -17,7 +18,8 @@
     "react-scripts": "2.1.1",
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "simple-react-validator": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
