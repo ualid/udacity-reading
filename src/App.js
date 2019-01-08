@@ -4,18 +4,18 @@ import CardSimple from './components/CardSimple';
 import NovoPost from './components/Form';
 import NoMatch from './components/NoMatch';
 import VisualizarDetalhe from './components/VisualizarDetalhe';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { fetchPosts } from './actions/posts'
-import { fetchCategories } from './actions/categories'
-import { visualizationForm } from './actions/shared'
-import { connect } from 'react-redux'
-import LoadingBar from 'react-redux-loading'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { fetchPosts } from './actions/posts';
+import { fetchCategories } from './actions/categories';
+import { visualizationForm } from './actions/shared';
+import { connect } from 'react-redux';
+import LoadingBar from 'react-redux-loading';
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch(fetchPosts('1'));
-    this.props.dispatch(fetchCategories());
-    this.props.dispatch(visualizationForm(false));
+    this.props.fetchPosts('1');
+    this.props.fetchCategories();
+    this.props.visualizationForm(false);
   }
 
   render() {
@@ -45,10 +45,18 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({posts, categories}) {
+function mapStateToProps({posts, categories}, dispatch) {
+  console.log(dispatch)
   return {
+
     loading: !posts.hasOwnProperty('data') || !categories.hasOwnProperty('data') ,
   }
 }
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = {
+  fetchPosts,
+  fetchCategories,
+  visualizationForm
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

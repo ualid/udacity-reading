@@ -1,5 +1,6 @@
 import axios from "axios";
-import { showLoading, hideLoading } from 'react-redux-loading'
+import { showLoading, hideLoading } from 'react-redux-loading';
+
 const urlBase = "http://localhost:3001/posts";
 export  function fetchPosts() {
     return (dispatch) => {

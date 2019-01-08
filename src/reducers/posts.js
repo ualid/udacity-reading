@@ -1,4 +1,5 @@
 import { RECEIVE_POSTS, RECEIVE_CATEGORIES_POSTS, ADD_POST, DELETE_POST, UPDATE_POST } from '../actions/posts';
+import cloneDeep from 'lodash/cloneDeep';
 
 export default function posts (state = {}, action) {
     let posts = null;
@@ -20,7 +21,7 @@ export default function posts (state = {}, action) {
             'data': state.data.concat(action.post.data) 
         }
         case UPDATE_POST: 
-        posts = state.data;
+        posts = cloneDeep(state.data);
         posts.splice(posts.findIndex(e => e.id === action.post.data.id),1);
         posts.push( action.post.data);
 
