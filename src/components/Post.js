@@ -6,13 +6,14 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
-import Panel from './Panel';
+import PanelPost from './PanelPost';
 import { connect } from 'react-redux'
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import { fetchPostsByCategories, fetchPosts } from '../actions/posts'
+import { filterSelectedFunc } from '../actions/shared'
 import Grid from '@material-ui/core/Grid';
 
 const styles = {
@@ -35,26 +36,29 @@ const styles = {
   },
 };
 
-class SimpleCard extends Component {
+class Post extends Component {
   state = { categoriesSelected: '', filterSelected: '1', posts: {} };
 
   handleChange = e => {
-    this.setState(() => {
-      return { categoriesSelected: e.target.value };
-    });
+    this.props.filterSelectedFunc({categoriesSelected: e.target.value});
 
-    if (e.target.value === "") {
-      this.props.fetchPosts(this.state.filterSelected)
+    if (e.target.value === "") {  
+      this.props.fetchPosts(this.props.filterSelected)
+      this.props.history.push('/');
     } else {
       this.props.fetchPostsByCategories(e.target.value)
+      this.props.history.push('/category');
     }
-    this.orderPosts(this.state.filterSelected, this.state.posts)
+    this.orderPosts(this.props.filterSelected, this.state.posts)
+ 
   }
   
   orderPosts(order, posts){
     let postsOrder = null;
-    
-    if(order == '1'){
+
+    //this.props.filterSelectedFunc({filterSelected: order});
+
+    if(order === '1'){
       postsOrder = posts.sort(function(a,b) { return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );  
     }else{
       postsOrder = posts.sort(function(a,b) { return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );  
@@ -67,16 +71,21 @@ class SimpleCard extends Component {
   });
   }
   componentWillMount() {
-    this.orderPosts(this.state.filterSelected, this.props.posts)
+    if(this.props.location.pathname === '/') {
+        this.props.filterSelectedFunc({categoriesSelected: '', filterSelected: '1'});
+        this.props.fetchPosts('')
+    }
+
+    this.orderPosts(this.props.filterSelected, this.props.posts)
   }
   componentWillReceiveProps(nextProps) {
-     this.orderPosts(this.state.filterSelected, nextProps.posts)
+     console.log('nextProps ', nextProps)
+     this.props.filterSelectedFunc({categoriesSelected: nextProps.categoriesSelected, filterSelected: nextProps.filterSelected});
+     this.orderPosts(nextProps.filterSelected, nextProps.posts)
   }
 
   handleFilter = e => {
-    this.setState( () => {
-      return { 'filterSelected': e.target.value } 
-    }); 
+    this.props.filterSelectedFunc({'filterSelected': e.target.value})
     this.orderPosts(e.target.value, this.state.posts);
   }
 
@@ -88,7 +97,7 @@ class SimpleCard extends Component {
        <FormControl className={classes.formControl}>
           <InputLabel htmlFor="categories-simple">Categories</InputLabel>
           <Select
-            value={this.state.categoriesSelected}
+            value={this.props.categoriesSelected}
             onChange={this.handleChange}
             inputProps={{
               name: 'Categories',
@@ -108,7 +117,7 @@ class SimpleCard extends Component {
         <FormControl className={classes.formControl}>
            <InputLabel htmlFor="categories-simple">Filtrar por: </InputLabel>
           <Select
-            value={this.state.filterSelected}
+            value={this.props.filterSelected}
             onChange={this.handleFilter}
             inputProps={{
               name: 'Categories',
@@ -133,7 +142,7 @@ class SimpleCard extends Component {
         <CardContent>
           {this.state.posts.map((post, index) => (
             <div className="row" key={index}>
-              <Panel post={post} />
+              <PanelPost post={post} />
             </div>
           ))
           }
@@ -145,20 +154,21 @@ class SimpleCard extends Component {
   }
 }
 
-SimpleCard.propTypes = {
-  classes: PropTypes.object.isRequired,
+Post.propTypes = {
+  classes: PropTypes.object.isRequired
 };
 
-function mapStateToProps({ posts, categories }, { id }) {
-  console.log(' mapStateToProps ', posts )
+function mapStateToProps({ posts, categories, shared }, { id }) {
   return {
     posts: posts.data,
-    categories: categories.data.categories
+    categories: categories.data.categories,
+    ...shared
   }
 }
 const mapDispatchToProps = {
   fetchPostsByCategories,
-  fetchPosts
+  fetchPosts,
+  filterSelectedFunc
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SimpleCard));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Post));

@@ -19,8 +19,14 @@ import Divider from "@material-ui/core/Divider";
 import { withRouter } from "react-router-dom";
 import { fetchComments, deleteCommenter } from "../actions/comments";
 import { visualizationForm } from "../actions/shared";
+import { deletePost, updatePost } from "../actions/posts";
 import FormCommenter from "./FormCommenter";
 import Commenter from "./Commenter";
+
+import EditIcon from "./EditIcon";
+import DeleteIcon from "./DeleteIcon";
+import LikeIcon from "./LikeIcon";
+import DislikeIcon from "./DislikeIcon";
 
 const styles = theme => ({
   card: {
@@ -53,14 +59,14 @@ const styles = theme => ({
   }
 });
 
-class VisualizarDetalhe extends React.Component {
+class PostDetail extends React.Component {
   state = { commenter: null };
   constructor(props, event) {
     super(props);
      
   if(props.post === undefined){
     alert('Post Not Found!');
-    props.history.push('/category');
+    props.history.push('/');
 }
   }
 
@@ -70,6 +76,22 @@ class VisualizarDetalhe extends React.Component {
     });
     this.props.visualizationForm(true);
   };
+  handlerClickEditPost = (post) => {
+    this.props.history.push({
+      pathname: `/post/${post.id}`,
+      id: post.id,
+      post
+    });
+  };
+
+  handlerClickDeletePost = (post) => {
+    this.props.deletePost(post);
+    this.props.history.push({
+      pathname: `/category`,
+      post
+    });
+  };
+
 
   handlerClickEdit = commenter => {
     this.props.visualizationForm(false);
@@ -82,6 +104,23 @@ class VisualizarDetalhe extends React.Component {
   handlerClickDelete = commenter => {
     this.props.deleteCommenter(commenter);
   };
+  like = (post) => {
+    const objSave = {
+      id: post.id,
+      timestamp: Date.now(),
+      voteScore: (post.voteScore + 1) 
+    };
+
+    this.props.updatePost(objSave);
+  }
+  dislike = (post) => {
+    const objSave = {
+      id: post.id,
+      timestamp: Date.now(),
+      voteScore: (post.voteScore - 1) 
+    };
+    this.props.updatePost(objSave);
+  }
   componentDidMount() {
     if(this.props.post !== undefined)
     this.props.fetchComments(this.props.post.id);
@@ -123,6 +162,11 @@ class VisualizarDetalhe extends React.Component {
                 <FavoriteIcon />
                 <Typography component="p">{post.voteScore}</Typography>
               </IconButton>
+              <EditIcon onClick={() => this.handlerClickEditPost(post)}/>
+              <DeleteIcon onClick={() => this.handlerClickDeletePost(post)}/>
+              <LikeIcon onClick={() => this.like(post)}/>
+              <DislikeIcon onClick={() => this.dislike(post)} />
+              
               <Button size="small" onClick={this.handleClick} color="primary">
                 New Commenter
               </Button>
@@ -146,7 +190,7 @@ class VisualizarDetalhe extends React.Component {
             <Grid>
               <Divider variant="middle" />
               <Typography gutterBottom variant="body1">
-                <b>Comments</b>
+                <b>Comments - {this.props.comments.data.length}</b>
               </Typography>
             </Grid>
             {this.props.comments.data.map((comment, index) => (
@@ -161,8 +205,10 @@ class VisualizarDetalhe extends React.Component {
   }
 }
 
-VisualizarDetalhe.propTypes = {
-  classes: PropTypes.object.isRequired
+PostDetail.propTypes = {
+  classes: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
+  comments: PropTypes.object.isRequired
 };
  
 
@@ -183,11 +229,13 @@ function mapStateToProps({ posts, comments, shared }, props) {
 const mapDispatchToProps = {
   fetchComments,
   deleteCommenter,
-  visualizationForm
+  visualizationForm,
+  deletePost,
+  updatePost
 };
 export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withStyles(styles)(VisualizarDetalhe))
+  )(withStyles(styles)(PostDetail))
 );

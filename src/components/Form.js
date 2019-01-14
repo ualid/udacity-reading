@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { fetchPostsByCategories, addPost, updatePost } from "../actions/posts";
 import { connect } from "react-redux";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 
 const styles = theme => ({
@@ -76,7 +73,7 @@ class TextFields extends React.Component {
         category: this.state.categoriesSelected
       };
 
-      const result = this.props.addPost(objSave);
+      this.props.addPost(objSave);
     } else {
       const objSave = {
         id: this.state.id,

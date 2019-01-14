@@ -1,13 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button'; 
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton'; 
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import EditIcon from './EditIcon';
@@ -16,7 +13,11 @@ import {connect} from 'react-redux';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Moment from 'react-moment';
+import LikeIcon from "./LikeIcon";
+import DislikeIcon from "./DislikeIcon";
 import red from '@material-ui/core/colors/red';
+import { updateCommenter } from '../actions/comments';
+import PropTypes from "prop-types";
 
 const styles = theme => ({
   card: {
@@ -50,6 +51,25 @@ const styles = theme => ({
 });
 
 class Commenter extends React.Component {
+  
+  like = (commenter) => {
+    const objSave = {
+      id: commenter.id,
+      voteScore: (commenter.voteScore + 1) 
+    };
+
+    this.props.updateCommenter(objSave);
+  }
+  dislike = (commenter) => {
+   
+    const objSave = {
+      id: commenter.id,
+      voteScore: (commenter.voteScore - 1) 
+    };
+
+    this.props.updateCommenter(objSave);
+  }
+
   render() {
     const { classes, comment, handlerClickEdit, handlerClickDelete} = this.props;
     return (
@@ -87,6 +107,9 @@ class Commenter extends React.Component {
                 {comment.voteScore}
               </Typography>
               </IconButton>
+                  <LikeIcon onClick={() => this.like(comment)}/>
+                  <DislikeIcon onClick={() => this.dislike(comment)}/>
+
                   <EditIcon onClick={() => handlerClickEdit(comment)}/>
                   <DeleteIcon onClick={() => handlerClickDelete(comment)}/>
             </CardActions>
@@ -94,11 +117,19 @@ class Commenter extends React.Component {
           }
 }
 
-function mapStateToProps ({comments},  props ) {
+Commenter.propTypes = {
+  comments: PropTypes.object.isRequired
+};
+
+
+function mapStateToProps ({comments}) {
   return {
     comments
   }
 }
 
- 
-export default connect(mapStateToProps)(withStyles(styles)(Commenter));
+const mapDispatchToProps = {
+  updateCommenter
+} 
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Commenter));

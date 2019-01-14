@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { fetchPostsByCategories, addRowPost } from '../actions/posts';
+import { addRowPost } from '../actions/posts';
 import { connect } from 'react-redux'
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';

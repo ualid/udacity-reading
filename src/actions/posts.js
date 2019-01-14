@@ -20,7 +20,7 @@ export  function  addPost(post) {
       dispatch(addRowPost(response))
       dispatch(hideLoading)  
       alert('Add Sucess!');
-      this.history.push('/category')
+      this.history.push('/')
      });
 
   }
@@ -75,7 +75,7 @@ export  function updatePost(post) {
       dispatch(updateRowPost(response))
       dispatch(hideLoading)  
       alert('Updated Sucess!');
-      this.history.push('/category')
+      this.history.push('/')
     });
 
   }

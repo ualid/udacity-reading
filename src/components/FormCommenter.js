@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { addCommenter, updateCommenter } from '../actions/comments';
 import { connect } from 'react-redux';
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 const styles = theme => ({
   container: {
