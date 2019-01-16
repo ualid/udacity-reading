@@ -151,7 +151,7 @@ class PostDetail extends React.Component {
             />
 
             <CardContent>
-              <Typography component="p">zxczxczxczxczxczxc</Typography>
+              <Typography component="p">{post.body}</Typography>
               <Typography component="p">
                 <b>{"Author: "}</b>
                 {post.author}

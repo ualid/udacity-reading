@@ -47,7 +47,7 @@ class Post extends Component {
       this.props.history.push('/');
     } else {
       this.props.fetchPostsByCategories(e.target.value)
-      this.props.history.push('/category');
+      this.props.history.push('/'+e.target.value);
     }
     this.orderPosts(this.props.filterSelected, this.state.posts)
  

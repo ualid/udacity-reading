@@ -36,7 +36,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/post/' component={NovoPost} />
               <Route exact path='/post/:id' component={NovoPost} />
-              <Route exact path='/category/:id' component={PostDetail} />
+              <Route exact path='/:category/:id' component={PostDetail} />
               <Route path='/category' component={Post} />
               <Route path='/' component={Post} />
               <Route  component={NoMatch} />
