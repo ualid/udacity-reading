@@ -43,7 +43,7 @@ class Post extends Component {
     this.props.filterSelectedFunc({categoriesSelected: e.target.value});
 
     if (e.target.value === "") {  
-      this.props.fetchPosts(this.props.filterSelected)
+      this.props.fetchPosts()
       this.props.history.push('/');
     } else {
       this.props.fetchPostsByCategories(e.target.value)
@@ -75,7 +75,7 @@ class Post extends Component {
     const urlSplit = this.props.location.pathname.split('/');
     if(urlSplit[1] === '') {
         this.props.filterSelectedFunc({categoriesSelected: '', filterSelected: '1'});
-        this.props.fetchPosts('');
+        this.props.fetchPosts();
       }else{
         this.props.fetchPostsByCategories(urlSplit[1]);
         this.props.filterSelectedFunc({categoriesSelected: urlSplit[1], filterSelected: '1'});
@@ -85,9 +85,14 @@ class Post extends Component {
   }
  
   componentWillReceiveProps(nextProps) {
-     //console.log('nextProps ', nextProps)
-    // this.props.fetchPosts('');
-     this.props.filterSelectedFunc({categoriesSelected: nextProps.categoriesSelected, filterSelected: nextProps.filterSelected});
+     
+     let category = nextProps.categoriesSelected;
+     if((this.props.location.pathname !== nextProps.location.pathname) && nextProps.location.pathname === '/') {
+        category = '';
+        this.props.fetchPosts();
+     }
+       
+      this.props.filterSelectedFunc({categoriesSelected: category, filterSelected: nextProps.filterSelected});
      this.orderPosts(nextProps.filterSelected, nextProps.posts)
   }
 
