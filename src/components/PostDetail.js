@@ -87,7 +87,7 @@ class PostDetail extends React.Component {
   handlerClickDeletePost = (post) => {
     this.props.deletePost(post);
     this.props.history.push({
-      pathname: `/category`,
+      pathname: `/${post.category}`,
       post
     });
   };

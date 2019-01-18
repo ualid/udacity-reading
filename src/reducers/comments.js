@@ -16,7 +16,6 @@ export default function comments(state = {}, action) {
         ...action.comments
       };
     case ADD_COMMENTER:
-      console.log(action.comment);
       return {
         ...state,
         data: state.data.concat(action.comment.data)

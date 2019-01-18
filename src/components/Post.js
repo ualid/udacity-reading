@@ -71,15 +71,22 @@ class Post extends Component {
   });
   }
   componentWillMount() {
-    if(this.props.location.pathname === '/') {
+    console.log('WillMount');
+    const urlSplit = this.props.location.pathname.split('/');
+    if(urlSplit[1] === '') {
         this.props.filterSelectedFunc({categoriesSelected: '', filterSelected: '1'});
-        this.props.fetchPosts('')
+        this.props.fetchPosts('');
+      }else{
+        this.props.fetchPostsByCategories(urlSplit[1]);
+        this.props.filterSelectedFunc({categoriesSelected: urlSplit[1], filterSelected: '1'});
     }
-
+   
     this.orderPosts(this.props.filterSelected, this.props.posts)
   }
+ 
   componentWillReceiveProps(nextProps) {
-     console.log('nextProps ', nextProps)
+     //console.log('nextProps ', nextProps)
+    // this.props.fetchPosts('');
      this.props.filterSelectedFunc({categoriesSelected: nextProps.categoriesSelected, filterSelected: nextProps.filterSelected});
      this.orderPosts(nextProps.filterSelected, nextProps.posts)
   }

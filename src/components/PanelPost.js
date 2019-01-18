@@ -57,9 +57,9 @@ class PanelPost extends Component {
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
-  showDetails(e, id) {
+  showDetails(e, id, category) {
     e.preventDefault();
-    this.props.history.push(`/category/${id}`);
+    this.props.history.push(`/${category}/${id}`);
   }
 
   handlerClickEdit = post => {
@@ -137,7 +137,7 @@ class PanelPost extends Component {
             {post.voteScore}
           </IconButton>
           <IconButton
-            onClick={e => this.showDetails(e, post.id)}
+            onClick={e => this.showDetails(e, post.id, post.category)}
             aria-label="Post"
           >
             <CommentIcon label="123" />

@@ -17,7 +17,6 @@ export function visualizationEdit(visualization) {
 
 export const FILTER_SELECTED = 'FILTER_SELECTED';
 export function filterSelectedFunc(filter) {
-  console.log('filter ',filter )
   return {
     type: FILTER_SELECTED,
     filter,
